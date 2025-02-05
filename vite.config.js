@@ -5,7 +5,7 @@ import path from 'path'
 import { fileURLToPath, URL } from 'node:url'
 
 // Configs File
-import configs from './src/configs/config'
+import configs from './src/configs/configs'
 const publicPath =
   process.env.NODE_ENV == 'production' ? configs.PATHWEBAPP : configs.PATHWEBAPP
 

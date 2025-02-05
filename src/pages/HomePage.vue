@@ -37,12 +37,7 @@
               :rules="durationRules"
             >
             </v-text-field>
-            <v-btn
-              class="ma-1"
-              type="submit"
-              color="primary"
-              :loading="isFetching"
-              variant="outlined"
+            <v-btn class="ma-1" type="submit" color="primary" variant="outlined"
               >Generate</v-btn
             >
           </v-form></v-card-content
@@ -56,7 +51,13 @@
     >
       <v-card class="generated-form mt-5 pa-5" v-if="showGeneratedContent">
         <v-card-content>
-          <v-textarea v-model="apiData" variant="outlined"> </v-textarea>
+          <v-textarea
+            v-model="generatedData"
+            variant="outlined"
+            :loading="generatedData == null"
+            :disabled="generatedData == null"
+          >
+          </v-textarea>
         </v-card-content>
         <v-btn color="primary" variant="outlined" @click="resetForm"
           >Generate another one</v-btn
@@ -70,6 +71,12 @@
   import { ref } from 'vue'
   import axios_instance from '@/services/axiosApi'
   import { useValidationRules } from '@/composables/useValidationRules'
+  import { GoogleGenerativeAI } from '@google/generative-ai'
+  import configs from '@/configs/configs'
+
+  //gen AI
+  const genAI = new GoogleGenerativeAI(configs.GEMINI_API_KEY)
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
   //form data
   const wdyw = ref('123123')
@@ -79,8 +86,10 @@
   const generateContentForm = ref(null)
 
   //api
-  const apiData = ref('')
-  const isFetching = ref(false)
+  const prompt = 'Explain how AI works'
+  const generatedData = ref(null)
+
+  //states
   const showGenerateForm = ref(true)
   const showGeneratedContent = ref(false)
 
@@ -88,13 +97,9 @@
     const valid = await generateContentForm.value.validate()
 
     if (valid.valid == true) {
-      isFetching.value = true
-      const response = await axios_instance.api.get(
-        'https://dummyjson.com/test',
-      )
-      apiData.value = JSON.stringify(response.data)
-      isFetching.value = false
       showGenerateForm.value = false
+      const result = await model.generateContent(prompt)
+      generatedData.value = result.response.text()
     }
   }
 
@@ -102,7 +107,7 @@
     // wdyw.value = ''
     // bgm.value = ''
     // duration.value = null
-    apiData.value = ''
+    generatedData.value = ''
     showGeneratedContent.value = false
   }
 
