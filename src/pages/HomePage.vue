@@ -12,7 +12,7 @@
             <v-textarea
               class="ma-1"
               v-model="wdyw"
-              label="What do you want?"
+              label="What story do you want to write about?"
               variant="outlined"
               :maxlength="150"
               :hint="wdyw.length + ' / 150'"
@@ -79,16 +79,14 @@
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
   //form data
-  const wdyw = ref('123123')
-  const bgm = ref('123123')
-  const duration = ref(12)
+  const wdyw = ref('')
+  const bgm = ref('')
+  const duration = ref('')
   const { durationRules, wdywRules, bgmRules } = useValidationRules()
   const generateContentForm = ref(null)
 
   //api
-  const prompt = 'Explain how AI works'
   const generatedData = ref(null)
-
   //states
   const showGenerateForm = ref(true)
   const showGeneratedContent = ref(false)
@@ -98,15 +96,16 @@
 
     if (valid.valid == true) {
       showGenerateForm.value = false
+      const prompt = `Generate me a ${duration.value} seconds story about ${wdyw.value}`
       const result = await model.generateContent(prompt)
       generatedData.value = result.response.text()
     }
   }
 
   const resetForm = () => {
-    // wdyw.value = ''
-    // bgm.value = ''
-    // duration.value = null
+    wdyw.value = ''
+    bgm.value = ''
+    duration.value = null
     generatedData.value = ''
     showGeneratedContent.value = false
   }
