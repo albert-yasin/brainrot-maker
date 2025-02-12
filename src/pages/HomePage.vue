@@ -40,12 +40,6 @@
             <v-btn class="ma-1" type="submit" color="primary" variant="outlined"
               >Generate</v-btn
             >
-            <v-btn
-              color="primary"
-              prepend-icon="mdi-volume-high"
-              @click="generateTTS"
-              >Generate TTS</v-btn
-            >
           </v-form></v-card-content
         >
       </v-card>
@@ -109,7 +103,18 @@
                 v-for="script in JSON.parse(generatedData.script.data)"
                 :key="script.timestamp"
               >
-                <span>{{ script.timestamp }} - {{ script.narator }} </span>
+                <v-row>
+                  <v-col cols="6">
+                    <span>{{ script.timestamp }} - {{ script.narator }} </span>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-btn
+                      color="primary"
+                      prepend-icon="mdi-volume-high"
+                      @click="generateTTS(script.narator)"
+                    />
+                  </v-col>
+                </v-row>
               </v-list>
             </v-col>
           </v-row>
@@ -201,12 +206,9 @@
     }
   }
 
-  const generateTTS = async () => {
+  const generateTTS = async (promptText) => {
     const voiceUrl = voicesEn['dylan'].url
-    const generate = await playHt.generateTTS(
-      'Hello my name is Albert',
-      voiceUrl,
-    )
+    const generate = await playHt.generateTTS(promptText, voiceUrl)
   }
 
   const resetForm = () => {
@@ -253,5 +255,9 @@
   .fade-left-to-right-leave-to {
     opacity: 0;
     transform: translateX(-50px);
+  }
+
+  .v-row {
+    margin: 0;
   }
 </style>
