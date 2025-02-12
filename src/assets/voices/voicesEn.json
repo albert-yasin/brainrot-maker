@@ -1,0 +1,12 @@
+{
+  "adolfo": {
+    "name": "Adolfo",
+    "gender": "Male",
+    "url": "s3://voice-cloning-zero-shot/d82d246c-148b-457f-9668-37b789520891/adolfosaad/manifest.json"
+  },
+  "dylan": {
+    "name": "Dylan",
+    "gender": "Male",
+    "url": "s3://voice-cloning-zero-shot/3a831d1f-2183-49de-b6d8-33f16b2e9867/dylansaad/manifest.json"
+  }
+}

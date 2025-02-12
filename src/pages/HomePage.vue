@@ -40,6 +40,12 @@
             <v-btn class="ma-1" type="submit" color="primary" variant="outlined"
               >Generate</v-btn
             >
+            <v-btn
+              color="primary"
+              prepend-icon="mdi-volume-high"
+              @click="generateTTS"
+              >Generate TTS</v-btn
+            >
           </v-form></v-card-content
         >
       </v-card>
@@ -64,6 +70,7 @@
                 "
                 :loading="generatedData.title.fetching == true"
                 :disabled="generatedData.title.data == null"
+                readonly
               ></v-textarea>
             </v-col>
             <v-col cols="12">
@@ -78,6 +85,7 @@
                 "
                 :loading="generatedData.caption.fetching == true"
                 :disabled="generatedData.caption.data == null"
+                readonly
               >
               </v-textarea>
             </v-col>
@@ -93,6 +101,7 @@
                 "
                 :loading="generatedData.script.fetching == true"
                 :disabled="generatedData.script.data == null"
+                readonly
               >
               </v-textarea>
               <v-list
@@ -119,6 +128,8 @@
   import { useValidationRules } from '@/composables/useValidationRules'
   import { GoogleGenerativeAI } from '@google/generative-ai'
   import configs from '@/configs/configs'
+  import playHt from '@/services/playHt'
+  import voicesEn from '@/assets/voices/voicesEn'
 
   //gen AI
   const genAI = new GoogleGenerativeAI(configs.GEMINI_API_KEY)
@@ -188,6 +199,14 @@
         generatedData.value.script.fetching = false
       }, 3000)
     }
+  }
+
+  const generateTTS = async () => {
+    const voiceUrl = voicesEn['dylan'].url
+    const generate = await playHt.generateTTS(
+      'Hello my name is Albert',
+      voiceUrl,
+    )
   }
 
   const resetForm = () => {
